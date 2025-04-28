@@ -2,12 +2,14 @@ from flask import Flask, request, jsonify, make_response  # type: ignore
 from flask_cors import CORS  # ✅ removed cross_origin
 from utils import load_model_and_predict, estimate_budget_for_user
 import os
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, module="resource_tracker")
 
 app = Flask(__name__)
 
 # ✅ Enable CORS for all routes from your Vite frontend
 CORS(app, resources={r"/*": {
-    "origins": ["http://localhost:5173", "http://127.0.0.1:5173"],
+    "origins": "*",
     "methods": ["GET", "POST", "OPTIONS"],
     "allow_headers": ["Content-Type"]
 }})
@@ -15,7 +17,7 @@ CORS(app, resources={r"/*": {
 # ✅ Optional fallback to ensure headers always included
 @app.after_request
 def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
+    response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
     return response
@@ -78,5 +80,5 @@ def test():
     return "Test route is working!"
 
 if __name__ == '__main__':
-    print("🚀 Starting Prediction API test...")
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)

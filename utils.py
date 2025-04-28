@@ -59,10 +59,11 @@ def load_model_and_predict(currency, start_date=None, end_date=None, window_size
 # ✅ Save prediction to MySQL
 def save_predictions_to_db(email, month, year, predictions, category_order):
     conn = mysql.connector.connect(
-        host="localhost",
+        host="ballast.proxy.rlwy.net",
         user="root",
-        password="",
-        database="currenclever"
+        port="19572",
+        password="WNgnXQcJDKLHIlOzyiZohpjfrcXKONae",
+        database="railway"
     )
     cursor = conn.cursor()
 
@@ -87,10 +88,13 @@ def save_predictions_to_db(email, month, year, predictions, category_order):
 # ✅ Estimate Budget (with optional month/year + income)
 def estimate_budget_for_user(email, month=None, year=None):
     conn = mysql.connector.connect(
-        host="localhost",
+        host="ballast.proxy.rlwy.net",
         user="root",
-        password="",
-        database="currenclever"
+        port="19572",
+        password="WNgnXQcJDKLHIlOzyiZohpjfrcXKONae",
+        database="railway",
+        # connect_timeout=10,
+        # connection_pool_size=5
     )
     cursor = conn.cursor(dictionary=True)
 
